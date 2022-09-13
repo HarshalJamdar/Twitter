@@ -44,30 +44,27 @@ const getNewsFeed = async function(req, res){
         let user1 = await userModel.findOne({ email : req.email });
         if(!user1 ) return res.status(404).send({ status : false, msg : "User not found" });
         req.userId = user1._id; 
-
-        if( userId === req.userId ){
-            
-            let sendData = await tweetModel.find(userId).sort({createdAt:1}).limit(10);
-
-
-
+       
+        let sendData = await tweetModel.find({userId}).sort({createdAt:1}).limit(10);
+        
+        if( userId.toString() === req.userId.toString() ){
             return res.status(200).send({ status: true, msg : "Successfull", data : sendData }); 
         }else{
+
         //==checking if following ==//
-            let temp = user.following, isIdPresent = false;
+            let temp = user.followers, isIdPresent = false;
+           
             for(let i=0;i<temp.length;i++){
             if(temp[i].toString()===userId.toString()){
                 isIdPresent = true;
                 break;
             }
-
+        }
             if(isIdPresent){
-                let sendData = await tweetModel.find(userId).sort({createdAt:1}).limit(10);
                 return res.status(200).send({ status: true, msg : "Successfull", data : sendData }); 
             }else{
                 return res.status(400).send({ status: false, msg : "Unsuccessfull, first follow user",  }); 
             }
-        }
 
       }
     }catch(err){
