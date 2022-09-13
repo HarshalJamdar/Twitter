@@ -45,7 +45,7 @@ const getNewsFeed = async function(req, res){
         if(!user1 ) return res.status(404).send({ status : false, msg : "User not found" });
         req.userId = user1._id; 
        
-        let sendData = await tweetModel.find({userId}).sort({createdAt:1}).limit(10);
+        let sendData = await tweetModel.find({userId}).sort({createdAt:-1}).limit(10);
         
 
         if( userId.toString() === req.userId.toString() ){
