@@ -47,13 +47,12 @@ const getNewsFeed = async function(req, res){
        
         let sendData = await tweetModel.find({userId}).sort({createdAt:1}).limit(10);
         
+
         if( userId.toString() === req.userId.toString() ){
             return res.status(200).send({ status: true, msg : "Successfull", data : sendData }); 
         }else{
-
         //==checking if following ==//
-            let temp = user.followers, isIdPresent = false;
-           
+            let temp = user1.following, isIdPresent = false;
             for(let i=0;i<temp.length;i++){
             if(temp[i].toString()===userId.toString()){
                 isIdPresent = true;
@@ -65,7 +64,6 @@ const getNewsFeed = async function(req, res){
             }else{
                 return res.status(400).send({ status: false, msg : "Unsuccessfull, first follow user",  }); 
             }
-
       }
     }catch(err){
     res.status(500).send({status:false, message:err.message});
